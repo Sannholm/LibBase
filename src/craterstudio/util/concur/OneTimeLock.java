@@ -8,51 +8,51 @@ import craterstudio.util.HighLevel;
 
 public class OneTimeLock
 {
-   private volatile boolean locked;
-   private final Object     lock;
-
-   public OneTimeLock()
-   {
-      this.locked = true;
-      this.lock = new Object();
-   }
-
-   public void waitFor()
-   {
-      synchronized (this.lock)
-      {
-         while (this.locked)
-         {
-            HighLevel.wait(this.lock);
-         }
-      }
-   }
-
-   public void yieldFor()
-   {
-      while (this.locked)
-      {
-         Thread.yield();
-      }
-   }
-
-   public boolean isLocked()
-   {
-      synchronized (this.lock)
-      {
-         return this.locked;
-      }
-   }
-
-   public void release()
-   {
-      synchronized (this.lock)
-      {
-         if (!this.locked)
-            throw new IllegalStateException("already released");
-         this.locked = false;
-
-         this.lock.notifyAll();
-      }
-   }
+    private volatile boolean locked;
+    private final Object lock;
+    
+    public OneTimeLock()
+    {
+        locked = true;
+        lock = new Object();
+    }
+    
+    public void waitFor()
+    {
+        synchronized (lock)
+        {
+            while (locked)
+            {
+                HighLevel.wait(lock);
+            }
+        }
+    }
+    
+    public void yieldFor()
+    {
+        while (locked)
+        {
+            Thread.yield();
+        }
+    }
+    
+    public boolean isLocked()
+    {
+        synchronized (lock)
+        {
+            return locked;
+        }
+    }
+    
+    public void release()
+    {
+        synchronized (lock)
+        {
+            if (!locked)
+                throw new IllegalStateException("already released");
+            locked = false;
+            
+            lock.notifyAll();
+        }
+    }
 }

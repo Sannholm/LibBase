@@ -9,17 +9,18 @@ import java.io.OutputStream;
 
 public class BytePatternReplacer extends BytePatternMatcher
 {
-   private final byte[] replacement;
-
-   public BytePatternReplacer(byte[] search, byte[] replacement)
-   {
-      super(search);
-
-      this.replacement = replacement.clone();
-   }
-
-   protected void onPattern(OutputStream out, byte[] pattern, int off, int len) throws IOException
-   {
-      out.write(this.replacement);
-   }
+    private final byte[] replacement;
+    
+    public BytePatternReplacer(byte[] search, byte[] replacement)
+    {
+        super(search);
+        
+        this.replacement = replacement.clone();
+    }
+    
+    @Override
+    protected void onPattern(OutputStream out, byte[] pattern, int off, int len) throws IOException
+    {
+        out.write(replacement);
+    }
 }

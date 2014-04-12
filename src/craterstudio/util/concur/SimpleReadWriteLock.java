@@ -8,86 +8,84 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SimpleReadWriteLock
 {
-   private final ReentrantReadWriteLock backing;
-
-   public SimpleReadWriteLock()
-   {
-      this.backing = new ReentrantReadWriteLock();
-   }
-
-   public SimpleReadWriteLock(boolean forWriting)
-   {
-      this();
-
-      if (forWriting)
-         this.beginWrite();
-      else
-         this.beginRead();
-   }
-
-   //
-
-   public boolean hasReadAccess()
-   {
-      return this.hasWriteAccess() || this.backing.getReadHoldCount() > 0;
-   }
-
-   public boolean hasWriteAccess()
-   {
-      return this.backing.isWriteLockedByCurrentThread();
-   }
-
-   //
-
-   public void checkAccess(boolean forWriting)
-   {
-      if (forWriting)
-         this.checkWriteAccess();
-      else
-         this.checkReadAccess();
-   }
-
-   public void checkReadAccess()
-   {
-      if (!this.hasReadAccess())
-         throw new IllegalThreadStateException();
-   }
-
-   public void checkWriteAccess()
-   {
-      if (!this.hasWriteAccess())
-         throw new IllegalThreadStateException();
-   }
-
-   //
-
-   public void beginRead()
-   {
-      if (this.hasReadAccess())
-         return;
-
-      this.backing.readLock().lock();
-   }
-
-   public void beginWrite()
-   {
-      if (this.hasWriteAccess())
-         return;
-
-      if (this.hasReadAccess())
-         throw new IllegalStateException("cannot aquire write-lock when read-lock is held");
-
-      this.backing.writeLock().lock();
-   }
-
-   //
-
-   public void finish()
-   {
-      while (this.backing.getReadHoldCount() > 0)
-         this.backing.readLock().unlock();
-
-      while (this.backing.getWriteHoldCount() > 0)
-         this.backing.writeLock().unlock();
-   }
+    private final ReentrantReadWriteLock backing;
+    
+    public SimpleReadWriteLock()
+    {
+        backing = new ReentrantReadWriteLock();
+    }
+    
+    public SimpleReadWriteLock(boolean forWriting)
+    {
+        this();
+        
+        if (forWriting) beginWrite();
+        else
+            beginRead();
+    }
+    
+    //
+    
+    public boolean hasReadAccess()
+    {
+        return hasWriteAccess() || backing.getReadHoldCount() > 0;
+    }
+    
+    public boolean hasWriteAccess()
+    {
+        return backing.isWriteLockedByCurrentThread();
+    }
+    
+    //
+    
+    public void checkAccess(boolean forWriting)
+    {
+        if (forWriting) checkWriteAccess();
+        else
+            checkReadAccess();
+    }
+    
+    public void checkReadAccess()
+    {
+        if (!hasReadAccess())
+            throw new IllegalThreadStateException();
+    }
+    
+    public void checkWriteAccess()
+    {
+        if (!hasWriteAccess())
+            throw new IllegalThreadStateException();
+    }
+    
+    //
+    
+    public void beginRead()
+    {
+        if (hasReadAccess())
+            return;
+        
+        backing.readLock().lock();
+    }
+    
+    public void beginWrite()
+    {
+        if (hasWriteAccess())
+            return;
+        
+        if (hasReadAccess())
+            throw new IllegalStateException("cannot aquire write-lock when read-lock is held");
+        
+        backing.writeLock().lock();
+    }
+    
+    //
+    
+    public void finish()
+    {
+        while (backing.getReadHoldCount() > 0)
+            backing.readLock().unlock();
+        
+        while (backing.getWriteHoldCount() > 0)
+            backing.writeLock().unlock();
+    }
 }

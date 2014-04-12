@@ -6,5 +6,5 @@ package craterstudio.func;
 
 public interface Filter<T>
 {
-   public boolean accept(T item);
+    public boolean accept(T item);
 }

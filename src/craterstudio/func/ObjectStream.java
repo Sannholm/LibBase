@@ -6,9 +6,9 @@ package craterstudio.func;
 
 public interface ObjectStream<T>
 {
-   public static final Object END_OF_STREAM = new Object();
-
-   public T next();
-
-   public void remove();
+    public static final Object END_OF_STREAM = new Object();
+    
+    public T next();
+    
+    public void remove();
 }

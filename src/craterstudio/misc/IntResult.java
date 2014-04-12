@@ -6,5 +6,5 @@ package craterstudio.misc;
 
 public interface IntResult
 {
-   public int get();
+    public int get();
 }

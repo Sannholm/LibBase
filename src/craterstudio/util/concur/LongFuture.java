@@ -8,81 +8,81 @@ import craterstudio.util.HighLevel;
 
 public class LongFuture
 {
-   private boolean      waiting;
-   private long         result;
-   private Exception    error;
-   private final Object lock;
-
-   public LongFuture()
-   {
-      this.waiting = true;
-      this.lock = new Object();
-   }
-
-   public boolean isDone()
-   {
-      synchronized (this.lock)
-      {
-         return !this.waiting;
-      }
-   }
-
-   public long peek(long defaultValue)
-   {
-      synchronized (this.lock)
-      {
-         if (this.waiting)
-         {
-            return defaultValue;
-         }
-
-         if (this.error != null)
-            throw new IllegalStateException("future error", this.error);
-         return this.result;
-      }
-   }
-
-   public long get()
-   {
-      synchronized (this.lock)
-      {
-         while (this.waiting)
-         {
-            HighLevel.wait(this.lock);
-         }
-
-         if (this.error != null)
-            throw new IllegalStateException("future error", this.error);
-         return this.result;
-      }
-   }
-
-   public void set(long result)
-   {
-      synchronized (this.lock)
-      {
-         if (!this.waiting)
-            throw new IllegalStateException("future already set");
-
-         this.result = result;
-         this.waiting = false;
-         this.lock.notifyAll();
-      }
-   }
-
-   public void error(Exception error)
-   {
-      if (error == null)
-         throw new NullPointerException();
-
-      synchronized (this.lock)
-      {
-         if (!this.waiting)
-            throw new IllegalStateException("future already set");
-
-         this.error = error;
-         this.waiting = false;
-         this.lock.notifyAll();
-      }
-   }
+    private boolean waiting;
+    private long result;
+    private Exception error;
+    private final Object lock;
+    
+    public LongFuture()
+    {
+        waiting = true;
+        lock = new Object();
+    }
+    
+    public boolean isDone()
+    {
+        synchronized (lock)
+        {
+            return !waiting;
+        }
+    }
+    
+    public long peek(long defaultValue)
+    {
+        synchronized (lock)
+        {
+            if (waiting)
+            {
+                return defaultValue;
+            }
+            
+            if (error != null)
+                throw new IllegalStateException("future error", error);
+            return result;
+        }
+    }
+    
+    public long get()
+    {
+        synchronized (lock)
+        {
+            while (waiting)
+            {
+                HighLevel.wait(lock);
+            }
+            
+            if (error != null)
+                throw new IllegalStateException("future error", error);
+            return result;
+        }
+    }
+    
+    public void set(long result)
+    {
+        synchronized (lock)
+        {
+            if (!waiting)
+                throw new IllegalStateException("future already set");
+            
+            this.result = result;
+            waiting = false;
+            lock.notifyAll();
+        }
+    }
+    
+    public void error(Exception error)
+    {
+        if (error == null)
+            throw new NullPointerException();
+        
+        synchronized (lock)
+        {
+            if (!waiting)
+                throw new IllegalStateException("future already set");
+            
+            this.error = error;
+            waiting = false;
+            lock.notifyAll();
+        }
+    }
 }

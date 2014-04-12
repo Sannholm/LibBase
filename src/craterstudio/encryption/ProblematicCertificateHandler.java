@@ -9,7 +9,7 @@ import java.security.cert.X509Certificate;
 
 public interface ProblematicCertificateHandler
 {
-   public boolean acceptProblematicServer(X509Certificate[] chain, String authType, CertificateException exc);
-
-   public boolean acceptProblematicClient(X509Certificate[] chain, String authType, CertificateException exc);
+    public boolean acceptProblematicServer(X509Certificate[] chain, String authType, CertificateException exc);
+    
+    public boolean acceptProblematicClient(X509Certificate[] chain, String authType, CertificateException exc);
 }

@@ -6,9 +6,9 @@ package craterstudio.bytes;
 
 public interface KeyValueSet
 {
-   public byte[] put(byte[] key, byte[] value);
-
-   public byte[] get(byte[] key);
-
-   public byte[] remove(byte[] key);
+    public byte[] put(byte[] key, byte[] value);
+    
+    public byte[] get(byte[] key);
+    
+    public byte[] remove(byte[] key);
 }

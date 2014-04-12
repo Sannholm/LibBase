@@ -6,7 +6,7 @@ package craterstudio.func;
 
 public interface Producer<T>
 {
-   public static final Object NO_RESULT = new Object();
-   
-   public T produce();
+    public static final Object NO_RESULT = new Object();
+    
+    public T produce();
 }

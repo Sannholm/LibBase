@@ -5,7 +5,7 @@ package craterstudio.util;
 
 public interface PoolHandler<T>
 {
-   public T create();
-
-   public void clean(T t);
+    public T create();
+    
+    public void clean(T t);
 }

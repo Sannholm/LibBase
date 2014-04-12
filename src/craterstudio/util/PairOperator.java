@@ -6,5 +6,5 @@ package craterstudio.util;
 
 public interface PairOperator<A, B>
 {
-   public void operate(A a, B b);
+    public void operate(A a, B b);
 }

@@ -10,30 +10,30 @@ import craterstudio.text.TextValues;
 
 public class Bandwidth
 {
-   private final Interval   oneSecond;
-   private final AtomicLong trafficSecond;
-
-   public Bandwidth()
-   {
-      this.oneSecond = new Interval(1000L);
-      this.trafficSecond = new AtomicLong();
-   }
-
-   protected void log(long bandwidth)
-   {
-      String formatted = TextValues.formatWithMagnitudeBytes(bandwidth, 1);
-      System.out.println("bandwidth: " + formatted + "B");
-   }
-
-   public void traffic(int bytes)
-   {
-      long bandwidth = this.trafficSecond.addAndGet(bytes);
-
-      if (this.oneSecond.hasPassedAndStep())
-      {
-         this.trafficSecond.addAndGet(-bandwidth);
-
-         this.log(bandwidth);
-      }
-   }
+    private final Interval oneSecond;
+    private final AtomicLong trafficSecond;
+    
+    public Bandwidth()
+    {
+        oneSecond = new Interval(1000L);
+        trafficSecond = new AtomicLong();
+    }
+    
+    protected void log(long bandwidth)
+    {
+        String formatted = TextValues.formatWithMagnitudeBytes(bandwidth, 1);
+        System.out.println("bandwidth: " + formatted + "B");
+    }
+    
+    public void traffic(int bytes)
+    {
+        long bandwidth = trafficSecond.addAndGet(bytes);
+        
+        if (oneSecond.hasPassedAndStep())
+        {
+            trafficSecond.addAndGet(-bandwidth);
+            
+            log(bandwidth);
+        }
+    }
 }

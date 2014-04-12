@@ -6,5 +6,5 @@ package craterstudio.util.concur;
 
 public interface ReadWriteTask<R, O>
 {
-   public O execute(R resource);
+    public O execute(R resource);
 }

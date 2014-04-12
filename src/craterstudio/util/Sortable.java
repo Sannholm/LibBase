@@ -5,7 +5,7 @@ package craterstudio.util;
 
 public interface Sortable
 {
-   public void calcSortIndex();
-
-   public int getSortIndex();
+    public void calcSortIndex();
+    
+    public int getSortIndex();
 }

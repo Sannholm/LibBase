@@ -6,5 +6,5 @@ package craterstudio.text;
 
 public interface TextTransformer
 {
-   public void transform(String[] parts);
+    public void transform(String[] parts);
 }

@@ -6,5 +6,5 @@ package craterstudio.func;
 
 public interface Exctractor<I, O>
 {
-   public Iterable<O> extract(I input);
+    public Iterable<O> extract(I input);
 }

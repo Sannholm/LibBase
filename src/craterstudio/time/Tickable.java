@@ -5,5 +5,5 @@ package craterstudio.time;
 
 public interface Tickable
 {
-   public void tick();
+    public void tick();
 }

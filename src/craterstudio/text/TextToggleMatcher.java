@@ -7,5 +7,5 @@ package craterstudio.text;
 
 public interface TextToggleMatcher
 {
-   public TextToggleState matches(boolean inMatch, char c);
+    public TextToggleState matches(boolean inMatch, char c);
 }

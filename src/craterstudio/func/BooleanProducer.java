@@ -6,5 +6,5 @@ package craterstudio.func;
 
 public interface BooleanProducer
 {
-   public boolean produce();
+    public boolean produce();
 }

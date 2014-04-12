@@ -9,17 +9,17 @@ import java.util.Arrays;
 
 public class KeytoolStore
 {
-   final File   file;
-   final byte[] password;
-
-   public KeytoolStore(File keystore, byte[] password)
-   {
-      this.file = keystore;
-      this.password = password;
-   }
-
-   public void discard()
-   {
-      Arrays.fill(this.password, (byte) 0);
-   }
+    final File file;
+    final byte[] password;
+    
+    public KeytoolStore(File keystore, byte[] password)
+    {
+        file = keystore;
+        this.password = password;
+    }
+    
+    public void discard()
+    {
+        Arrays.fill(password, (byte)0);
+    }
 }

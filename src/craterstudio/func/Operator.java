@@ -6,5 +6,5 @@ package craterstudio.func;
 
 public interface Operator<T>
 {
-   public void operate(T item);
+    public void operate(T item);
 }

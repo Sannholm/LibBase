@@ -11,150 +11,150 @@ import java.util.Set;
 
 public class AttachableOutputStream extends OutputStream
 {
-   public AttachableOutputStream()
-   {
-      this.streams = new HashSet<OutputStream>();
-   }
-
-   //
-
-   private Set<OutputStream> streams;
-
-   public void attach(OutputStream out)
-   {
-      synchronized (this.streams)
-      {
-         this.streams.add(out);
-      }
-   }
-
-   public void detach(OutputStream out)
-   {
-      synchronized (this.streams)
-      {
-         this.streams.remove(out);
-      }
-   }
-
-   //
-
-   @Override
-   public void write(int b) throws IOException
-   {
-      synchronized (this.streams)
-      {
-         Set<OutputStream> remove = null;
-         for (OutputStream out : this.streams)
-         {
-            try
+    public AttachableOutputStream()
+    {
+        streams = new HashSet<OutputStream>();
+    }
+    
+    //
+    
+    private final Set<OutputStream> streams;
+    
+    public void attach(OutputStream out)
+    {
+        synchronized (streams)
+        {
+            streams.add(out);
+        }
+    }
+    
+    public void detach(OutputStream out)
+    {
+        synchronized (streams)
+        {
+            streams.remove(out);
+        }
+    }
+    
+    //
+    
+    @Override
+    public void write(int b) throws IOException
+    {
+        synchronized (streams)
+        {
+            Set<OutputStream> remove = null;
+            for (OutputStream out : streams)
             {
-               out.write(b);
+                try
+                {
+                    out.write(b);
+                }
+                catch (IOException exc)
+                {
+                    if (remove == null)
+                        remove = new HashSet<OutputStream>();
+                    remove.add(out);
+                }
             }
-            catch (IOException exc)
+            if (remove != null)
+                streams.remove(remove);
+        }
+    }
+    
+    @Override
+    public void write(byte[] buf) throws IOException
+    {
+        synchronized (streams)
+        {
+            Set<OutputStream> remove = null;
+            for (OutputStream out : streams)
             {
-               if (remove == null)
-                  remove = new HashSet<OutputStream>();
-               remove.add(out);
+                try
+                {
+                    out.write(buf);
+                }
+                catch (IOException exc)
+                {
+                    if (remove == null)
+                        remove = new HashSet<OutputStream>();
+                    remove.add(out);
+                }
             }
-         }
-         if (remove != null)
-            this.streams.remove(remove);
-      }
-   }
-
-   @Override
-   public void write(byte[] buf) throws IOException
-   {
-      synchronized (this.streams)
-      {
-         Set<OutputStream> remove = null;
-         for (OutputStream out : this.streams)
-         {
-            try
+            if (remove != null)
+                streams.remove(remove);
+        }
+    }
+    
+    @Override
+    public void write(byte[] buf, int off, int len) throws IOException
+    {
+        synchronized (streams)
+        {
+            Set<OutputStream> remove = null;
+            for (OutputStream out : streams)
             {
-               out.write(buf);
+                try
+                {
+                    out.write(buf, off, len);
+                }
+                catch (IOException exc)
+                {
+                    if (remove == null)
+                        remove = new HashSet<OutputStream>();
+                    remove.add(out);
+                }
             }
-            catch (IOException exc)
+            if (remove != null)
+                streams.remove(remove);
+        }
+    }
+    
+    @Override
+    public void flush() throws IOException
+    {
+        synchronized (streams)
+        {
+            Set<OutputStream> remove = null;
+            for (OutputStream out : streams)
             {
-               if (remove == null)
-                  remove = new HashSet<OutputStream>();
-               remove.add(out);
+                try
+                {
+                    out.flush();
+                }
+                catch (IOException exc)
+                {
+                    if (remove == null)
+                        remove = new HashSet<OutputStream>();
+                    remove.add(out);
+                }
             }
-         }
-         if (remove != null)
-            this.streams.remove(remove);
-      }
-   }
-
-   @Override
-   public void write(byte[] buf, int off, int len) throws IOException
-   {
-      synchronized (this.streams)
-      {
-         Set<OutputStream> remove = null;
-         for (OutputStream out : this.streams)
-         {
-            try
+            if (remove != null)
+                streams.remove(remove);
+        }
+    }
+    
+    @Override
+    public void close() throws IOException
+    {
+        synchronized (streams)
+        {
+            Set<OutputStream> remove = null;
+            for (OutputStream out : streams)
             {
-               out.write(buf, off, len);
+                try
+                {
+                    out.close();
+                }
+                catch (IOException exc)
+                {
+                    if (remove == null)
+                        remove = new HashSet<OutputStream>();
+                    remove.add(out);
+                }
             }
-            catch (IOException exc)
-            {
-               if (remove == null)
-                  remove = new HashSet<OutputStream>();
-               remove.add(out);
-            }
-         }
-         if (remove != null)
-            this.streams.remove(remove);
-      }
-   }
-
-   @Override
-   public void flush() throws IOException
-   {
-      synchronized (this.streams)
-      {
-         Set<OutputStream> remove = null;
-         for (OutputStream out : this.streams)
-         {
-            try
-            {
-               out.flush();
-            }
-            catch (IOException exc)
-            {
-               if (remove == null)
-                  remove = new HashSet<OutputStream>();
-               remove.add(out);
-            }
-         }
-         if (remove != null)
-            this.streams.remove(remove);
-      }
-   }
-
-   @Override
-   public void close() throws IOException
-   {
-      synchronized (this.streams)
-      {
-         Set<OutputStream> remove = null;
-         for (OutputStream out : this.streams)
-         {
-            try
-            {
-               out.close();
-            }
-            catch (IOException exc)
-            {
-               if (remove == null)
-                  remove = new HashSet<OutputStream>();
-               remove.add(out);
-            }
-         }
-         if (remove != null)
-            this.streams.remove(remove);
-      }
-   }
+            if (remove != null)
+                streams.remove(remove);
+        }
+    }
 }

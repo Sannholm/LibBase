@@ -10,48 +10,48 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AwaitZeroLatch
 {
-   private final AtomicInteger  value;
-   private final CountDownLatch latch;
-
-   public AwaitZeroLatch()
-   {
-      this(0);
-   }
-
-   public AwaitZeroLatch(int initialValue)
-   {
-      this.value = new AtomicInteger(initialValue);
-      this.latch = new CountDownLatch(1);
-   }
-
-   public int increment()
-   {
-      return this.value.incrementAndGet();
-   }
-
-   public int decrement()
-   {
-      int v = this.value.decrementAndGet();
-
-      if (v == 0)
-      {
-         this.latch.countDown();
-      }
-      else if (v < 0)
-      {
-         throw new IllegalStateException();
-      }
-
-      return v;
-   }
-
-   public void await() throws InterruptedException
-   {
-      this.latch.await();
-   }
-
-   public void await(long time, TimeUnit unit) throws InterruptedException
-   {
-      this.latch.await(time, unit);
-   }
+    private final AtomicInteger value;
+    private final CountDownLatch latch;
+    
+    public AwaitZeroLatch()
+    {
+        this(0);
+    }
+    
+    public AwaitZeroLatch(int initialValue)
+    {
+        value = new AtomicInteger(initialValue);
+        latch = new CountDownLatch(1);
+    }
+    
+    public int increment()
+    {
+        return value.incrementAndGet();
+    }
+    
+    public int decrement()
+    {
+        int v = value.decrementAndGet();
+        
+        if (v == 0)
+        {
+            latch.countDown();
+        }
+        else if (v < 0)
+        {
+            throw new IllegalStateException();
+        }
+        
+        return v;
+    }
+    
+    public void await() throws InterruptedException
+    {
+        latch.await();
+    }
+    
+    public void await(long time, TimeUnit unit) throws InterruptedException
+    {
+        latch.await(time, unit);
+    }
 }

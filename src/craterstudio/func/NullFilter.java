@@ -6,8 +6,9 @@ package craterstudio.func;
 
 public class NullFilter<T> implements Filter<T>
 {
-   public boolean accept(T value)
-   {
-      return (value != null);
-   }
+    @Override
+    public boolean accept(T value)
+    {
+        return (value != null);
+    }
 }

@@ -6,5 +6,5 @@ package craterstudio.util;
 
 public interface Bottleneck
 {
-   public int feed(int amount);
+    public int feed(int amount);
 }

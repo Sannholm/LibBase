@@ -16,80 +16,80 @@ import craterstudio.io.Streams;
 
 public abstract class SwapOutputStream extends AbstractOutputStream
 {
-   private long               rem;
-   private OutputStream       swap;
-   private final OutputStream target;
-
-   public SwapOutputStream(long maxBytes, OutputStream after)
-   {
-      super(new ByteArrayOutputStream());
-
-      this.rem = maxBytes;
-      this.swap = null;
-      this.target = after;
-   }
-
-   //
-
-   protected abstract File provideSwapFile() throws IOException;
-
-   private File swapFile;
-
-   //
-
-   private OutputStream provideSwapOutputStream() throws IOException
-   {
-      if (this.swapFile != null)
-         throw new IllegalStateException();
-      this.swapFile = this.provideSwapFile();
-      return new BufferedOutputStream(new FileOutputStream(this.swapFile));
-   }
-
-   private void switchStreams() throws IOException
-   {
-      if (this.swap != null)
-         throw new IllegalStateException();
-      this.swap = this.provideSwapOutputStream();
-      if (this.swap == null)
-         throw new NullPointerException();
-      ((ByteArrayOutputStream) super.backing).writeTo(this.swap);
-   }
-
-   //
-
-   @Override
-   public void write(byte[] buf, int off, int len) throws IOException
-   {
-      if (this.swap == null && len > this.rem)
-         this.switchStreams();
-
-      if (this.swap == null)
-         this.rem -= len;
-
-      ((this.swap != null) ? this.swap : super.backing).write(buf, off, len);
-   }
-
-   @Override
-   public void flush() throws IOException
-   {
-      ((this.swap != null) ? this.swap : super.backing).flush();
-   }
-
-   @Override
-   public void close() throws IOException
-   {
-      ((this.swap != null) ? this.swap : super.backing).close();
-
-      if (this.swap == null)
-      {
-         ((ByteArrayOutputStream) super.backing).writeTo(this.target);
-         this.target.close();
-      }
-      else
-      {
-         Streams.pump(new FileInputStream(this.swapFile), this.target);
-
-         this.swapFile.delete();
-      }
-   }
+    private long rem;
+    private OutputStream swap;
+    private final OutputStream target;
+    
+    public SwapOutputStream(long maxBytes, OutputStream after)
+    {
+        super(new ByteArrayOutputStream());
+        
+        rem = maxBytes;
+        swap = null;
+        target = after;
+    }
+    
+    //
+    
+    protected abstract File provideSwapFile() throws IOException;
+    
+    private File swapFile;
+    
+    //
+    
+    private OutputStream provideSwapOutputStream() throws IOException
+    {
+        if (swapFile != null)
+            throw new IllegalStateException();
+        swapFile = provideSwapFile();
+        return new BufferedOutputStream(new FileOutputStream(swapFile));
+    }
+    
+    private void switchStreams() throws IOException
+    {
+        if (swap != null)
+            throw new IllegalStateException();
+        swap = provideSwapOutputStream();
+        if (swap == null)
+            throw new NullPointerException();
+        ((ByteArrayOutputStream)super.backing).writeTo(swap);
+    }
+    
+    //
+    
+    @Override
+    public void write(byte[] buf, int off, int len) throws IOException
+    {
+        if (swap == null && len > rem)
+            switchStreams();
+        
+        if (swap == null)
+            rem -= len;
+        
+        ((swap != null) ? swap : super.backing).write(buf, off, len);
+    }
+    
+    @Override
+    public void flush() throws IOException
+    {
+        ((swap != null) ? swap : super.backing).flush();
+    }
+    
+    @Override
+    public void close() throws IOException
+    {
+        ((swap != null) ? swap : super.backing).close();
+        
+        if (swap == null)
+        {
+            ((ByteArrayOutputStream)super.backing).writeTo(target);
+            target.close();
+        }
+        else
+        {
+            Streams.pump(new FileInputStream(swapFile), target);
+            
+            swapFile.delete();
+        }
+    }
 }

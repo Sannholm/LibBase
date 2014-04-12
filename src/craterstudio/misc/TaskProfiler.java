@@ -8,52 +8,52 @@ import craterstudio.util.concur.OneThreadAccess;
 
 public class TaskProfiler
 {
-   private final OneThreadAccess access;
-   private boolean               measuring;
-   private long                  started;
-   private long                  total;
-
-   public TaskProfiler()
-   {
-      this.access = new OneThreadAccess();
-   }
-
-   private long now()
-   {
-      return System.nanoTime();
-   }
-
-   public void reset()
-   {
-      this.access.check();
-      
-      this.total = 0L;
-   }
-
-   public void start()
-   {
-      this.access.check();
-
-      if (this.measuring)
-         throw new IllegalStateException();
-      this.measuring = true;
-
-      this.started = this.now();
-   }
-
-   public void stop()
-   {
-      this.access.check();
-
-      if (!this.measuring)
-         throw new IllegalStateException();
-      this.measuring = false;
-
-      this.total += (this.now() - this.started);
-   }
-
-   public long total()
-   {
-      return this.total;
-   }
+    private final OneThreadAccess access;
+    private boolean measuring;
+    private long started;
+    private long total;
+    
+    public TaskProfiler()
+    {
+        access = new OneThreadAccess();
+    }
+    
+    private long now()
+    {
+        return System.nanoTime();
+    }
+    
+    public void reset()
+    {
+        access.check();
+        
+        total = 0L;
+    }
+    
+    public void start()
+    {
+        access.check();
+        
+        if (measuring)
+            throw new IllegalStateException();
+        measuring = true;
+        
+        started = now();
+    }
+    
+    public void stop()
+    {
+        access.check();
+        
+        if (!measuring)
+            throw new IllegalStateException();
+        measuring = false;
+        
+        total += (now() - started);
+    }
+    
+    public long total()
+    {
+        return total;
+    }
 }

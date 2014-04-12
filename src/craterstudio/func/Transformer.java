@@ -6,5 +6,5 @@ package craterstudio.func;
 
 public interface Transformer<I, O>
 {
-   public O transform(I value);
+    public O transform(I value);
 }

@@ -10,32 +10,32 @@ import java.util.zip.GZIPInputStream;
 
 public class DelayedGZipInputStream extends AbstractInputStream
 {
-   public DelayedGZipInputStream(final InputStream in)
-   {
-      super(new ChainedInputStream()
-      {
-         boolean first = true;
-
-         @Override
-         protected InputStream nextStream()
-         {
-            if (!this.first)
+    public DelayedGZipInputStream(final InputStream in)
+    {
+        super(new ChainedInputStream()
+        {
+            boolean first = true;
+            
+            @Override
+            protected InputStream nextStream()
             {
-               return null;
+                if (!first)
+                {
+                    return null;
+                }
+                
+                first = false;
+                
+                try
+                {
+                    return new GZIPInputStream(in);
+                }
+                catch (IOException exc)
+                {
+                    throw new IllegalStateException(exc);
+                }
             }
-
-            this.first = false;
-
-            try
-            {
-               return new GZIPInputStream(in);
-            }
-            catch (IOException exc)
-            {
-               throw new IllegalStateException(exc);
-            }
-         }
-      });
-   }
-
+        });
+    }
+    
 }

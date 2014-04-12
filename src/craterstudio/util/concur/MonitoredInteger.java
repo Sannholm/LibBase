@@ -8,193 +8,193 @@ import craterstudio.util.HighLevel;
 
 public class MonitoredInteger
 {
-   private int          value;
-   private final Object lock;
-
-   public MonitoredInteger()
-   {
-      this.value = 0;
-      this.lock = new Object();
-   }
-
-   //
-
-   public void set(int value)
-   {
-      synchronized (this.lock)
-      {
-         this.value = value;
-
-         this.lock.notifyAll();
-      }
-   }
-
-   public int get()
-   {
-      synchronized (this.lock)
-      {
-         return this.value;
-      }
-   }
-
-   public int adjust(int amount)
-   {
-      synchronized (this.lock)
-      {
-         this.value += amount;
-
-         this.lock.notifyAll();
-         
-         return this.value;
-      }
-   }
-
-   //
-
-   public int waitForModification()
-   {
-      synchronized (this.lock)
-      {
-         int valueAtStart = this.value;
-
-         while (this.value != valueAtStart)
-         {
-            HighLevel.wait(this.lock);
-         }
-
-         return this.value;
-      }
-   }
-
-   public void waitForEqual(int value)
-   {
-      synchronized (this.lock)
-      {
-         while (this.value != value)
-         {
-            HighLevel.wait(this.lock);
-         }
-      }
-   }
-
-   public void waitForNotEqual(int value)
-   {
-      synchronized (this.lock)
-      {
-         while (this.value == value)
-         {
-            HighLevel.wait(this.lock);
-         }
-      }
-   }
-
-   public int waitForLessThan(int value)
-   {
-      synchronized (this.lock)
-      {
-         while (this.value >= value)
-         {
-            HighLevel.wait(this.lock);
-         }
-
-         return this.value;
-      }
-   }
-
-   public int waitForGreaterThan(int value)
-   {
-      synchronized (this.lock)
-      {
-         while (this.value <= value)
-         {
-            HighLevel.wait(this.lock);
-         }
-
-         return this.value;
-      }
-   }
-
-   //
-
-   public int waitForEqualAndAdjust(int equal, int adjust)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForEqual(equal);
-         this.adjust(adjust);
-         return this.value;
-      }
-   }
-
-   public int waitForNotEqualAndAdjust(int notEqual, int adjust)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForNotEqual(notEqual);
-         this.adjust(adjust);
-         return this.value;
-      }
-   }
-
-   public int waitForLessThanAndAdjust(int lessThan, int adjust)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForLessThan(lessThan);
-         this.adjust(adjust);
-         return this.value;
-      }
-   }
-
-   public int waitForGreaterThanAndAdjust(int greaterThan, int adjust)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForGreaterThan(greaterThan);
-         this.adjust(adjust);
-         return this.value;
-      }
-   }
-
-   //
-
-   public int waitForEqualAndSet(int equal, int set)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForEqual(equal);
-         this.set(set);
-         return this.value;
-      }
-   }
-
-   public int waitForNotEqualAndSet(int notEqual, int set)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForNotEqual(notEqual);
-         this.set(set);
-         return this.value;
-      }
-   }
-
-   public int waitForLessThanAndSet(int lessThan, int set)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForLessThan(lessThan);
-         this.set(set);
-         return this.value;
-      }
-   }
-
-   public int waitForGreaterThanAndSet(int greaterThan, int set)
-   {
-      synchronized (this.lock)
-      {
-         this.waitForGreaterThan(greaterThan);
-         this.set(set);
-         return this.value;
-      }
-   }
+    private int value;
+    private final Object lock;
+    
+    public MonitoredInteger()
+    {
+        value = 0;
+        lock = new Object();
+    }
+    
+    //
+    
+    public void set(int value)
+    {
+        synchronized (lock)
+        {
+            this.value = value;
+            
+            lock.notifyAll();
+        }
+    }
+    
+    public int get()
+    {
+        synchronized (lock)
+        {
+            return value;
+        }
+    }
+    
+    public int adjust(int amount)
+    {
+        synchronized (lock)
+        {
+            value += amount;
+            
+            lock.notifyAll();
+            
+            return value;
+        }
+    }
+    
+    //
+    
+    public int waitForModification()
+    {
+        synchronized (lock)
+        {
+            int valueAtStart = value;
+            
+            while (value != valueAtStart)
+            {
+                HighLevel.wait(lock);
+            }
+            
+            return value;
+        }
+    }
+    
+    public void waitForEqual(int value)
+    {
+        synchronized (lock)
+        {
+            while (this.value != value)
+            {
+                HighLevel.wait(lock);
+            }
+        }
+    }
+    
+    public void waitForNotEqual(int value)
+    {
+        synchronized (lock)
+        {
+            while (this.value == value)
+            {
+                HighLevel.wait(lock);
+            }
+        }
+    }
+    
+    public int waitForLessThan(int value)
+    {
+        synchronized (lock)
+        {
+            while (this.value >= value)
+            {
+                HighLevel.wait(lock);
+            }
+            
+            return this.value;
+        }
+    }
+    
+    public int waitForGreaterThan(int value)
+    {
+        synchronized (lock)
+        {
+            while (this.value <= value)
+            {
+                HighLevel.wait(lock);
+            }
+            
+            return this.value;
+        }
+    }
+    
+    //
+    
+    public int waitForEqualAndAdjust(int equal, int adjust)
+    {
+        synchronized (lock)
+        {
+            waitForEqual(equal);
+            adjust(adjust);
+            return value;
+        }
+    }
+    
+    public int waitForNotEqualAndAdjust(int notEqual, int adjust)
+    {
+        synchronized (lock)
+        {
+            waitForNotEqual(notEqual);
+            adjust(adjust);
+            return value;
+        }
+    }
+    
+    public int waitForLessThanAndAdjust(int lessThan, int adjust)
+    {
+        synchronized (lock)
+        {
+            waitForLessThan(lessThan);
+            adjust(adjust);
+            return value;
+        }
+    }
+    
+    public int waitForGreaterThanAndAdjust(int greaterThan, int adjust)
+    {
+        synchronized (lock)
+        {
+            waitForGreaterThan(greaterThan);
+            adjust(adjust);
+            return value;
+        }
+    }
+    
+    //
+    
+    public int waitForEqualAndSet(int equal, int set)
+    {
+        synchronized (lock)
+        {
+            waitForEqual(equal);
+            set(set);
+            return value;
+        }
+    }
+    
+    public int waitForNotEqualAndSet(int notEqual, int set)
+    {
+        synchronized (lock)
+        {
+            waitForNotEqual(notEqual);
+            set(set);
+            return value;
+        }
+    }
+    
+    public int waitForLessThanAndSet(int lessThan, int set)
+    {
+        synchronized (lock)
+        {
+            waitForLessThan(lessThan);
+            set(set);
+            return value;
+        }
+    }
+    
+    public int waitForGreaterThanAndSet(int greaterThan, int set)
+    {
+        synchronized (lock)
+        {
+            waitForGreaterThan(greaterThan);
+            set(set);
+            return value;
+        }
+    }
 }

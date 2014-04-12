@@ -6,5 +6,5 @@ package craterstudio.func;
 
 public interface Callback<T>
 {
-   public void callback(T item);
+    public void callback(T item);
 }

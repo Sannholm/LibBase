@@ -6,5 +6,5 @@ package craterstudio.time;
 
 public enum DateIntervalType
 {
-   DAY, WEEK, MONTH, YEAR;
+    DAY, WEEK, MONTH, YEAR;
 }

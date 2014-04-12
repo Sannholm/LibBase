@@ -8,5 +8,5 @@ import java.io.File;
 
 public interface DirectoryVisitor
 {
-   public void visit(File parent, String name);
+    public void visit(File parent, String name);
 }

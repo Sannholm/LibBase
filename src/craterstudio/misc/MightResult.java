@@ -6,5 +6,5 @@ package craterstudio.misc;
 
 public interface MightResult<T>
 {
-   public T get() throws Throwable;
+    public T get() throws Throwable;
 }
