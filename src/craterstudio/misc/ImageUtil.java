@@ -258,7 +258,6 @@ public class ImageUtil
         }
     }
     
-    @SuppressWarnings("unused")
     private static void blurScanlinesSlow(int[] src, int width, int radius, int[] dst)
     {
         final int lines = src.length / width;

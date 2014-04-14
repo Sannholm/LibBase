@@ -61,7 +61,6 @@ public class BezierCurve
         return tt;
     }
     
-    @SuppressWarnings("unused")
     private static float pow0(float t)
     {
         return 1.0f;

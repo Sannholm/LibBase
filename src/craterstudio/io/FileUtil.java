@@ -247,7 +247,6 @@ public class FileUtil
         return recursiveDataSource;
     }
     
-    @SuppressWarnings("unused")
     public static final int countFilesInDirectory(File dir)
     {
         int counter = 0;

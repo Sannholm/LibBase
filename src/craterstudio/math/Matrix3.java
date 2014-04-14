@@ -152,8 +152,8 @@ public class Matrix3
     
     public final void rot(float a)
     {
-        if (true)
-            throw new UnsupportedOperationException("bugged");
+        if (true) throw new UnsupportedOperationException("bugged");
+        
         a = -a;
         
         float d00 = FastMath.cosDeg(a);
